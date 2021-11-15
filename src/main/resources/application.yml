@@ -1,0 +1,60 @@
+# local, dev, prod ?? ??
+application:
+  version: 1.0.0
+  title: demo
+
+spring:
+  profiles:
+    active: local # ??? ??? ??
+
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true # spring-boot-devtools: live-reload
+
+---
+# =========================
+# local ??
+# =========================
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  data:
+    jpa:
+      repositories:
+        bootstrap-mode: default
+
+  datasource:
+    url: jdbc:h2:mem:testdb # Set the database URL a constant
+
+  h2:
+    console:
+      enabled: true # Enable H2 console
+      settings:
+        web-allow-others: true # Allow H2 console access from browser
+
+  jpa:
+    show-sql: true # Show SQL generated
+
+  # Spring Security
+  security:
+    # Default username and password
+    user:
+      name: username
+      password: password
+
+logging:
+  level:
+    root: info # debug
+
+server:
+  error:
+    include-exception: true
+    include-binding-errors: always
+    whitelabel:
+      enabled: true
+
+---
