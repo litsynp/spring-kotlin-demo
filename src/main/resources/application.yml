@@ -1,11 +1,10 @@
-# local, dev, prod ?? ??
 application:
   version: 1.0.0
   title: demo
 
 spring:
   profiles:
-    active: local # ??? ??? ??
+    active: local
 
   devtools:
     restart:
@@ -15,7 +14,7 @@ spring:
 
 ---
 # =========================
-# local ??
+# local
 # =========================
 spring:
   config:
