@@ -6,7 +6,6 @@ import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.NotNull
 
 @Entity
 @Table(name = "account", uniqueConstraints = [UniqueConstraint(columnNames = ["email"])])
@@ -17,9 +16,12 @@ data class User(
 
     var password: String,
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    var role: Role
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        joinColumns = [JoinColumn(name = "user_id")],
+        inverseJoinColumns = [JoinColumn(name = "role_id")]
+    )
+    var roles: MutableSet<Role> = mutableSetOf()
 ) : BaseTimeEntity() {
 
     @Id
@@ -27,13 +29,10 @@ data class User(
     @Type(type = "uuid-char")
     val id: UUID = UUID.randomUUID()
 
-    fun update(@Email @NotEmpty email: String, password: String): User {
+    fun update(@Email @NotEmpty email: String, password: String, roles: MutableSet<Role>): User {
         this.email = email
         this.password = password
+        this.roles = roles
         return this
-    }
-
-    fun getRoleKey(): String {
-        return this.role.key
     }
 }

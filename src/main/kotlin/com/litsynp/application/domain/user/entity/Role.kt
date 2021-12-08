@@ -1,9 +1,17 @@
 package com.litsynp.application.domain.user.entity
 
-enum class Role(
-    val key: String,
-    val title: String
+import org.hibernate.annotations.Type
+import java.util.*
+import javax.persistence.*
+
+@Entity
+@Table(uniqueConstraints = [UniqueConstraint(columnNames = ["name"])])
+data class Role(
+    @Enumerated(EnumType.STRING)
+    var name: ERole
 ) {
-    ADMIN("ROLE_ADMIN", "Admin role"),
-    USER("ROLE_USER", "User role")
+    @Id
+    @Column(name = "id", columnDefinition = "CHAR(36)")
+    @Type(type = "uuid-char")
+    val id: UUID = UUID.randomUUID()
 }

@@ -1,9 +1,14 @@
 package com.litsynp.application.domain.user.service
 
+import com.litsynp.application.domain.user.entity.ERole
 import com.litsynp.application.domain.user.entity.Role
 import com.litsynp.application.domain.user.entity.User
+import com.litsynp.application.domain.user.exception.RoleNotFoundException
+import com.litsynp.application.domain.user.exception.UserDuplicateException
+import com.litsynp.application.domain.user.repository.RoleRepository
 import com.litsynp.application.domain.user.repository.UserRepository
 import org.springframework.http.HttpStatus
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.server.ResponseStatusException
@@ -11,12 +16,22 @@ import java.util.*
 
 @Service
 class UserService(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    val encoder: PasswordEncoder
 ) {
     @Transactional
     fun signup(user: User): User {
-        val newUser = User(email = user.email, password = user.password, Role.USER)
-        return userRepository.save(newUser)
+        val user = User(
+            email = user.email,
+            password = encoder.encode(user.password),
+            roles= user.roles
+        )
+
+        if (userRepository.existsByEmail(user.email)) {
+            throw UserDuplicateException("email", user.email)
+        }
+
+        return userRepository.save(user)
     }
 
     @Transactional(readOnly = true)

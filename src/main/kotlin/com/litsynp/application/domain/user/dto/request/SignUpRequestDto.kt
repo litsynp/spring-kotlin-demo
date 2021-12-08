@@ -1,13 +1,18 @@
 package com.litsynp.application.domain.user.dto.request
 
 import javax.validation.constraints.Email
-import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.Size
 
-class SignUpRequestDto(
+data class SignUpRequestDto(
     @Email
-    @NotEmpty
+    @NotBlank
+    @Size(max = 50)
     val email: String,
 
-    @NotEmpty
-    val password: String
+    @NotBlank
+    @Size(min = 6, max = 40)
+    val password: String,
+
+    val roles: Set<String>
 )

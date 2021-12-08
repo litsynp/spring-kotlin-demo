@@ -14,5 +14,5 @@ class UserResponseDto(
     val email: String,
 
     @NotNull
-    val role: Role
+    val roles: MutableSet<String>
 )
