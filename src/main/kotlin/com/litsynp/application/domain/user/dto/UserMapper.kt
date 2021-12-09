@@ -36,7 +36,6 @@ class UserMapper(
                         roles.add(adminRole)
                     }
                     else -> {
-                        log.info(ERole.ROLE_USER.name)
                         val userRole: Role = roleRepository.findOneByName(ERole.ROLE_USER)
                             .orElseThrow { RoleNotFoundException(ERole.ROLE_USER.name) }
                         roles.add(userRole)
