@@ -9,10 +9,10 @@ import javax.validation.constraints.NotNull
 class UserResponseDto(
     val id: UUID,
 
-    @Email
-    @NotEmpty
+    @field:Email
+    @field:NotEmpty
     val email: String,
 
-    @NotNull
+    @field:NotNull
     val roles: MutableSet<String>
 )

@@ -10,8 +10,8 @@ import javax.validation.constraints.NotEmpty
 @Entity
 @Table(name = "account", uniqueConstraints = [UniqueConstraint(columnNames = ["email"])])
 data class User(
-    @Email
-    @NotEmpty
+    @field:Email
+    @field:NotEmpty
     var email: String,
 
     var password: String,

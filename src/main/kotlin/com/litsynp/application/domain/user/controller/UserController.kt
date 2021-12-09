@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.*
 import java.util.*
-import java.util.function.Consumer
+import javax.validation.Valid
 
 
 @RestController
@@ -35,7 +35,7 @@ class UserController(
     }
 
     @PostMapping
-    fun signUp(@RequestBody requestDto: SignUpRequestDto): ResponseEntity<UserResponseDto> {
+    fun signUp(@Valid @RequestBody requestDto: SignUpRequestDto): ResponseEntity<UserResponseDto> {
 
         val user = userService.signup(userMapper.toEntity(requestDto))
         return ResponseEntity.ok(userMapper.toUserResponseDto(user))
