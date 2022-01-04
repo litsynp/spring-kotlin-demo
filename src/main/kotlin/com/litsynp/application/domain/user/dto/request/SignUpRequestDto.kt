@@ -14,5 +14,5 @@ data class SignUpRequestDto(
     @field:Size(min = 6, max = 40)
     val password: String,
 
-    val roles: Set<String>
+    val roles: Set<RoleRequestDto>
 )

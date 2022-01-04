@@ -1,6 +1,8 @@
 package com.litsynp.application.domain.user.dto
 
+import com.litsynp.application.domain.user.dto.request.RoleRequestDto
 import com.litsynp.application.domain.user.dto.request.SignUpRequestDto
+import com.litsynp.application.domain.user.dto.response.RoleResponseDto
 import com.litsynp.application.domain.user.dto.response.UserResponseDto
 import com.litsynp.application.domain.user.entity.ERole
 import com.litsynp.application.domain.user.entity.Role
@@ -14,33 +16,23 @@ import java.util.function.Consumer
 
 @Component
 class UserMapper(
-    val roleRepository: RoleRepository
+    val roleRepository: RoleRepository,
+    val roleMapper: RoleMapper
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun toEntity(dto: SignUpRequestDto): User {
 
-        val strRoles: Set<String> = dto.roles
+        val requestRoles: Set<RoleRequestDto> = dto.roles
         val roles: MutableSet<Role> = HashSet<Role>()
 
-        if (strRoles.isEmpty()) {
+        if (requestRoles.isEmpty()) {
             val userRole: Role = roleRepository.findOneByName(ERole.ROLE_USER)
                 .orElseThrow { RoleNotFoundException(ERole.ROLE_USER.name) }
             roles.add(userRole)
         } else {
-            strRoles.forEach(Consumer { role: String? ->
-                when (role) {
-                    "admin" -> {
-                        val adminRole: Role = roleRepository.findOneByName(ERole.ROLE_ADMIN)
-                            .orElseThrow { RoleNotFoundException(ERole.ROLE_ADMIN.name) }
-                        roles.add(adminRole)
-                    }
-                    else -> {
-                        val userRole: Role = roleRepository.findOneByName(ERole.ROLE_USER)
-                            .orElseThrow { RoleNotFoundException(ERole.ROLE_USER.name) }
-                        roles.add(userRole)
-                    }
-                }
+            requestRoles.forEach(Consumer { role: RoleRequestDto ->
+                roles.add(roleMapper.toEntity(role))
             })
         }
 
@@ -51,7 +43,7 @@ class UserMapper(
         return UserResponseDto(
             id = user.id,
             email = user.email,
-            roles = user.roles.map { role -> role.name.name }.toMutableSet()
+            roles = user.roles.map { role -> roleMapper.toResponseDto(role) }.toMutableSet()
         )
     }
 }

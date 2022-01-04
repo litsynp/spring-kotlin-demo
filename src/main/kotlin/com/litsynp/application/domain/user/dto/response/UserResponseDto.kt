@@ -1,6 +1,5 @@
 package com.litsynp.application.domain.user.dto.response
 
-import com.litsynp.application.domain.user.entity.Role
 import java.util.*
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotEmpty
@@ -14,5 +13,5 @@ class UserResponseDto(
     val email: String,
 
     @field:NotNull
-    val roles: MutableSet<String>
+    val roles: MutableSet<RoleResponseDto>
 )
