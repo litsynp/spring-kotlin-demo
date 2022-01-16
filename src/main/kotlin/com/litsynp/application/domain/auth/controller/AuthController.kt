@@ -1,7 +1,6 @@
 package com.litsynp.application.domain.auth.controller
 
-import com.litsynp.application.domain.auth.dto.request.LoginRequestDto
-import com.litsynp.application.domain.auth.dto.response.JwtResponseDto
+import com.litsynp.application.domain.auth.dto.AuthDto
 import com.litsynp.application.global.security.jwt.JwtUtils
 import com.litsynp.application.global.security.services.UserDetailsImpl
 import org.springframework.http.ResponseEntity
@@ -24,7 +23,7 @@ class AuthController(
     val jwtUtils: JwtUtils
 ) {
     @PostMapping("/tokens")
-    fun login(@Valid @RequestBody requestDto: LoginRequestDto): ResponseEntity<JwtResponseDto> {
+    fun login(@Valid @RequestBody requestDto: AuthDto.LoginRequest): ResponseEntity<AuthDto.JwtResponse> {
 
         val authentication = authenicationManager.authenticate(
             UsernamePasswordAuthenticationToken(
@@ -42,7 +41,7 @@ class AuthController(
             .collect(Collectors.toList())
 
         return ResponseEntity.ok(
-            JwtResponseDto(
+            AuthDto.JwtResponse(
                 token = jwt,
                 id = userDetails.id,
                 email = userDetails.email,

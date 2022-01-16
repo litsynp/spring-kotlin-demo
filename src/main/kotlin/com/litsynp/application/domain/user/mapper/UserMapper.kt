@@ -1,9 +1,7 @@
-package com.litsynp.application.domain.user.dto
+package com.litsynp.application.domain.user.mapper
 
-import com.litsynp.application.domain.user.dto.request.RoleRequestDto
-import com.litsynp.application.domain.user.dto.request.SignUpRequestDto
-import com.litsynp.application.domain.user.dto.response.RoleResponseDto
-import com.litsynp.application.domain.user.dto.response.UserResponseDto
+import com.litsynp.application.domain.user.dto.RoleDto
+import com.litsynp.application.domain.user.dto.UserDto
 import com.litsynp.application.domain.user.entity.ERole
 import com.litsynp.application.domain.user.entity.Role
 import com.litsynp.application.domain.user.entity.User
@@ -21,9 +19,9 @@ class UserMapper(
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun toEntity(dto: SignUpRequestDto): User {
+    fun toEntity(dto: UserDto.SignUpRequest): User {
 
-        val requestRoles: Set<RoleRequestDto> = dto.roles
+        val requestRoles: Set<RoleDto.Request> = dto.roles
         val roles: MutableSet<Role> = HashSet<Role>()
 
         if (requestRoles.isEmpty()) {
@@ -31,7 +29,7 @@ class UserMapper(
                 .orElseThrow { RoleNotFoundException(ERole.ROLE_USER.name) }
             roles.add(userRole)
         } else {
-            requestRoles.forEach(Consumer { role: RoleRequestDto ->
+            requestRoles.forEach(Consumer { role: RoleDto.Request ->
                 roles.add(roleMapper.toEntity(role))
             })
         }
@@ -39,8 +37,8 @@ class UserMapper(
         return User(email = dto.email, password = dto.password, roles = roles)
     }
 
-    fun toUserResponseDto(user: User): UserResponseDto {
-        return UserResponseDto(
+    fun toUserResponseDto(user: User): UserDto.Response {
+        return UserDto.Response(
             id = user.id,
             email = user.email,
             roles = user.roles.map { role -> roleMapper.toResponseDto(role) }.toMutableSet()

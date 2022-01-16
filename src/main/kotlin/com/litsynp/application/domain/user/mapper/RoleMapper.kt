@@ -1,7 +1,6 @@
-package com.litsynp.application.domain.user.dto
+package com.litsynp.application.domain.user.mapper
 
-import com.litsynp.application.domain.user.dto.request.RoleRequestDto
-import com.litsynp.application.domain.user.dto.response.RoleResponseDto
+import com.litsynp.application.domain.user.dto.RoleDto
 import com.litsynp.application.domain.user.entity.ERole
 import com.litsynp.application.domain.user.entity.Role
 import com.litsynp.application.domain.user.exception.RoleNotFoundException
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Component
 class RoleMapper(
     val roleRepository: RoleRepository
 ) {
-    fun toEntity(dto: RoleRequestDto): Role {
+    fun toEntity(dto: RoleDto.Request): Role {
         return when (dto.role) {
             "admin" -> {
                 roleRepository.findOneByName(ERole.ROLE_ADMIN)
@@ -25,7 +24,7 @@ class RoleMapper(
         }
     }
 
-    fun toResponseDto(role: Role): RoleResponseDto {
-        return RoleResponseDto(role = role.name.name)
+    fun toResponseDto(role: Role): RoleDto.Response {
+        return RoleDto.Response(role = role.name.name)
     }
 }

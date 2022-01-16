@@ -1,11 +1,7 @@
 package com.litsynp.application.domain.user.service
 
-import com.litsynp.application.domain.user.entity.ERole
-import com.litsynp.application.domain.user.entity.Role
 import com.litsynp.application.domain.user.entity.User
-import com.litsynp.application.domain.user.exception.RoleNotFoundException
 import com.litsynp.application.domain.user.exception.UserDuplicateException
-import com.litsynp.application.domain.user.repository.RoleRepository
 import com.litsynp.application.domain.user.repository.UserRepository
 import org.springframework.http.HttpStatus
 import org.springframework.security.crypto.password.PasswordEncoder
