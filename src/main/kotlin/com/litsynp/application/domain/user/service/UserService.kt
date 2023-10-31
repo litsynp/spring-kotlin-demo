@@ -20,7 +20,7 @@ class UserService(
         val user = User(
             email = user.email,
             password = encoder.encode(user.password),
-            roles= user.roles
+            roles = user.roles
         )
 
         if (userRepository.existsByEmail(user.email)) {

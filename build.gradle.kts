@@ -70,3 +70,10 @@ tasks.asciidoctor {
     inputs.dir(snippetsDir)
     dependsOn(tasks.test)
 }
+
+tasks.bootJar {
+    dependsOn("asciidoctor")
+    from("$/html5") {
+        into("static/docs")
+    }
+}
